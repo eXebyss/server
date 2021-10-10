@@ -4,7 +4,6 @@ const config = require('config')
 const jwt = require('jsonwebtoken')
 const { check, validationResult } = require('express-validator')
 const User = require('../models/User')
-const authMiddle = require('../middleware/auth.middleware')
 const authMiddleware = require('../middleware/auth.middleware')
 
 const router = new Router()
@@ -24,7 +23,7 @@ router.post(
 			if (!errors.isEmpty()) {
 				return res.status(400).json({ message: 'Incorrect request', errors })
 			}
-			const { email, password } = req.body
+			const { email, nickname, password } = req.body
 			const candidate = await User.findOne({ email })
 			if (candidate) {
 				return res
@@ -32,7 +31,7 @@ router.post(
 					.json({ message: `User with email ${email} already exists` })
 			}
 			const hasPassword = await bcrypt.hash(password, 8)
-			const user = new User({ email, password: hasPassword })
+			const user = new User({ email, nickname, password: hasPassword })
 			await user.save()
 			res.status(201).json({ message: 'User was successfully registered' })
 		} catch (err) {
@@ -61,6 +60,7 @@ router.post('/login', async (req, res) => {
 			user: {
 				id: user.id,
 				email: user.email,
+				nickname: user.nickname,
 			},
 		})
 	} catch (err) {
@@ -80,6 +80,7 @@ router.get('/auth', authMiddleware, async (req, res) => {
 			user: {
 				id: user.id,
 				email: user.email,
+				nickname: user.nickname,
 			},
 		})
 	} catch (err) {
