@@ -3,8 +3,8 @@ const Post = require('../models/Post')
 class PostController {
     createPost = async (req, res) => {
         try {
-            const { content, date } = req.body
-            const post = new Post({ content, date })
+            const { nickname, content, date } = req.body
+            const post = new Post({ nickname, content, date })
             await post.save()
             console.log('Post has been created successfully!')
             res.status(201).json({ message: 'Post has been created successfully!' })
