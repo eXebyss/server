@@ -1,9 +1,9 @@
 const Router = require('express')
-const postController = require('../controller/postsController')
+const messageController = require('../controller/messageController')
 
 const router = new Router()
 
-router.post('/create-post', postController.createPost)
-router.get('/get-posts', postController.getPosts)
+router.post('/new-message', messageController.createMessage)
+router.get('/get-messages', messageController.getMessages)
 
 module.exports = router
