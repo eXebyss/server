@@ -20,13 +20,23 @@ class MessageController {
 
 	getMessages = async (req, res) => {
 		try {
+			const messages = await Message.find()
+			res.status(200).json(messages)
+		} catch (err) {
+			console.log(err)
+			res.status(500).json({ message: 'Ooopps... Something went wrong... 2' })
+		}
+	}
+
+	getMessagesLongPolling = async (req, res) => {
+		try {
 			emitter.once('newMessage', async messages => {
 				messages = await Message.find()
 				res.status(200).json(messages)
 			})
 		} catch (err) {
 			console.log(err)
-			res.status(500).json({ message: 'Ooopps... Something went wrong... 2' })
+			res.status(500).json({ message: 'Ooopps... Something went wrong... 3' })
 		}
 	}
 }
