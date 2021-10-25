@@ -4,7 +4,7 @@ const authMiddleware = require('../middleware/auth.middleware')
 
 const router = new Router()
 
-router.post('/registration', authController.registration)
+router.post('/registration', authController.credentialsCheck, authController.registration)
 
 router.post('/login', authController.login)
 

@@ -5,38 +5,35 @@ const { check, validationResult } = require('express-validator')
 const User = require('../models/User')
 
 class AuthController {
-	registration = () => {
-		;[
-			check('email', 'Incorrect email').isEmail(),
-			check(
-				'password',
-				'Password must be at least 3 characters and shorter than 16!'
-			).isLength({ min: 3, max: 16 }),
-		],
-			async (req, res) => {
-				try {
-					const errors = validationResult(req)
-					if (!errors.isEmpty()) {
-						return res
-							.status(400)
-							.json({ message: 'Incorrect request', errors })
-					}
-					const { email, nickname, password } = req.body
-					const candidate = await User.findOne({ email })
-					if (candidate) {
-						return res
-							.status(400)
-							.json({ message: `User with email ${email} already exists` })
-					}
-					const hasPassword = await bcrypt.hash(password, 8)
-					const user = new User({ email, nickname, password: hasPassword })
-					await user.save()
-					res.status(201).json({ message: 'User was successfully registered' })
-				} catch (err) {
-					console.log(err)
-					res.status(500).json({ message: 'Server error 1' })
-				}
+	credentialsCheck = [
+		check('email', 'Incorrect email').isEmail(),
+		check(
+			'password',
+			'Password must be at least 3 characters and shorter than 16!'
+		).isLength({ min: 3, max: 16 }),
+	]
+
+	registration = async (req, res) => {
+		try {
+			const errors = validationResult(req)
+			if (!errors.isEmpty()) {
+				return res.status(400).json({ message: 'Incorrect request', errors })
 			}
+			const { email, nickname, password } = req.body
+			const candidate = await User.findOne({ email })
+			if (candidate) {
+				return res
+					.status(400)
+					.json({ message: `User with email ${email} already exists` })
+			}
+			const hasPassword = await bcrypt.hash(password, 8)
+			const user = new User({ email, nickname, password: hasPassword })
+			await user.save()
+			res.status(201).json({ message: 'User was successfully registered' })
+		} catch (err) {
+			console.log(err)
+			res.status(500).json({ message: 'Server error 1' })
+		}
 	}
 
 	login = async (req, res) => {
