@@ -1,5 +1,0 @@
-{
-	"serverPort": 5000,
-	"dbUrl": "mongodb+srv://BibkaDB1:ZT6cBKR1ei8RXlmR@cluster0.l97yk.mongodb.net/TestDB1?retryWrites=true&w=majority",
-	"secretKey": "mern-register-login"
-}
