@@ -15,7 +15,7 @@ app.use('/api/message', messageRouter)
 
 const start = async () => {
 	try {
-		await mongoose.connect(config.get('dbUrl'))
+		await mongoose.connect(process.env.dbUrl || config.get('dbUrl'))
 
 		app.listen(PORT, () => {
 			console.log('Server listening on port: ', PORT)

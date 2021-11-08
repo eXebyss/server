@@ -11,7 +11,10 @@ module.exports = async (req, res, next) => {
 		if (!token) {
 			return res.status(401).json({ message: 'Auth error 1' })
 		}
-		const decoded = jwt.verify(token, config.get('secretKey'))
+		const decoded = jwt.verify(
+			token,
+			process.env.secretKey || config.get('secretKey')
+		)
 		req.user = decoded
 		next()
 	} catch (error) {
